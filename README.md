@@ -1,18 +1,51 @@
-# Salesforce DX Project: Next Steps
+# Smart AI Opportunity Risk Assessment Wizard for B2B Sales
 
-Now that you’ve created a Salesforce DX project, what’s next? Here are some documentation resources to get you started.
+**Author:** Rajeev Shekhar - rshekhar@salesforce.com
 
-## How Do You Plan to Deploy Your Changes?
+An intelligent Salesforce DX project that deploys an AI-powered Opportunity Risk Assessment Wizard, designed to easily create the Opportunity creation process in Salesforce.
 
-Do you want to deploy a set of changes, or create a self-contained application? Choose a [development model](https://developer.salesforce.com/tools/vscode/en/user-guide/development-models).
+## Prerequisites
 
-## Configure Your Salesforce DX Project
+Ensure you have the following tools installed before starting:
 
-The `sfdx-project.json` file contains useful configuration information for your project. See [Salesforce DX Project Configuration](https://developer.salesforce.com/docs/atlas.en-us.sfdx_dev.meta/sfdx_dev/sfdx_dev_ws_config.htm) in the _Salesforce DX Developer Guide_ for details about this file.
+- **[Salesforce CLI](https://developer.salesforce.com/tools/sfdxcli)** (sf CLI) - Latest version
+- **[Node.js](https://nodejs.org/)** - Version 18 or higher
+- **[Git](https://git-scm.com/)** - For version control
+- **Enable Prerequisites:** Ensure the following features are enabled in your target org:
+   - Einstein Generative AI
+   - Einstein for Sales
+   - Prompt Builder
+   - Data Cloud
 
-## Read All About It
+## Quick Start Guide
 
-- [Salesforce Extensions Documentation](https://developer.salesforce.com/tools/vscode/)
-- [Salesforce CLI Setup Guide](https://developer.salesforce.com/docs/atlas.en-us.sfdx_setup.meta/sfdx_setup/sfdx_setup_intro.htm)
-- [Salesforce DX Developer Guide](https://developer.salesforce.com/docs/atlas.en-us.sfdx_dev.meta/sfdx_dev/sfdx_dev_intro.htm)
-- [Salesforce CLI Command Reference](https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference.htm)
+### Step 1: Clone the Repository
+
+```bash
+git clone https://github.com/salesforce-pixel/AI_OpportunityRiskAssessmentWizard.git
+cd <repository-name>
+```
+
+### Step 2: Authenticate with Your Salesforce Org
+
+```bash
+sf org login web -a targetOrg
+```
+
+> **Note:** Replace `targetOrg` with your preferred alias for the target organization.
+
+### Step 3: Deploy to Salesforce
+
+```bash
+sf project deploy start -x manifest/package.xml -o targetOrg -l NoTestRun
+```
+
+The metadata will be deployed to your target org automatically.
+
+### Step 4: Load Sample Data
+
+Import the sample Sales Alert data to activate the dashboard:
+
+```bash
+sf data import tree --files Sales_Alerts__c.json --target-org yourTargetOrg 
+```

@@ -1,0 +1,667 @@
+<template>
+    <div class="dnv-wizard-container">
+        <div class="dnv-header">
+            <div class="header-content">
+                <div class="header-left">
+                    <div class="logo-section">
+                        <img src={vrLogoUrl} alt="Logo" class="dnv-logo"/>
+                        <div class="title-section">
+                            <h1 class="main-title">Create New Opportunity</h1>
+                            <p class="subtitle">Follow the guided process to create a compliant Opportunity</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="header-right">
+                    <lightning-button-icon 
+                        icon-name="utility:close" 
+                        variant="bare" 
+                        size="large"
+                        onclick={handleCancel}
+                        alternative-text="Close"
+                        class="close-button">
+                    </lightning-button-icon>
+                </div>
+            </div>
+            
+            <div class="progress-section">
+                <div class="progress-track">
+                    <div class="progress-step" data-step="1">
+                        <div class={step1Classes}>
+                            <lightning-icon icon-name="utility:company" size="small" class="step-icon"></lightning-icon>
+                            <span class="step-number">1</span>
+                        </div>
+                        <div class="step-info">
+                            <span class="step-title">Account Verification</span>
+                            <span class="step-description">Verify Account Information</span>
+                        </div>
+                    </div>
+                    
+                    <div class="progress-connector" data-active={isStep2OrLater}></div>
+                    
+                    <div class="progress-step" data-step="2">
+                        <div class={step2Classes}>
+                            <lightning-icon icon-name="utility:shield" size="small" class="step-icon"></lightning-icon>
+                            <span class="step-number">2</span>
+                        </div>
+                        <div class="step-info">
+                            <span class="step-title">Risk Assessment</span>
+                            <span class="step-description">Validate Service & Compliance</span>
+                        </div>
+                    </div>
+                    
+                    <div class="progress-connector" data-active={isStep3}></div>
+                    
+                    <div class="progress-step" data-step="3">
+                        <div class={step3Classes}>
+                            <lightning-icon icon-name="utility:opportunity" size="small" class="step-icon"></lightning-icon>
+                            <span class="step-number">3</span>
+                        </div>
+                        <div class="step-info">
+                            <span class="step-title">Finalize & Create</span>
+                            <span class="step-description">AI Assistance & Creation</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <template if:true={isStep2}>
+                    <div class="sub-progress-section">
+                        <div class="sub-progress-track">
+                            <div class="sub-step" data-active={isSubStepTypeSelection}>
+                                <span class="sub-step-label">Select Service</span>
+                            </div>
+                            <div class="sub-step" data-active={isSubStepRiskAssessment}>
+                                <span class="sub-step-label">Risk Assessment</span>
+                            </div>
+                            <div class="sub-step" data-active={isSubStepResults}>
+                                <span class="sub-step-label">Review Results</span>
+                            </div>
+                        </div>
+                    </div>
+                </template>
+            </div>
+        </div>
+
+        <div class="wizard-content">
+            <template if:true={isStep1}>
+                <div class="step-container">
+                    <div class="step-header">
+                        <h2 class="step-heading">Account Verification</h2>
+                        <p class="step-subheading">Review and confirm the account details below</p>
+                    </div>
+                    
+                    <template if:true={isLoadingAccount}>
+                        <div class="loading-container">
+                            <lightning-spinner size="medium" alternative-text="Loading account data..."></lightning-spinner>
+                            <p class="loading-text">Retrieving customer information...</p>
+                        </div>
+                    </template>
+
+                    <template if:false={isLoadingAccount}>
+                        <div class="content-card">
+                            <div class="card-header">
+                                <lightning-icon icon-name="utility:company" size="small" class="card-icon"></lightning-icon>
+                                <h3 class="card-title">Customer Information</h3>
+                                <div class="verification-badge">
+                                    <lightning-icon icon-name="utility:check" size="x-small"></lightning-icon>
+                                    <span>Verified</span>
+                                </div>
+                            </div>
+                            
+                            <lightning-record-view-form record-id={recordId} object-api-name="Account">
+                                <div class="field-grid">
+                                    <div class="field-group">
+                                        <lightning-output-field field-name="Name" class="field-item"></lightning-output-field>
+                                    </div>
+                                    <div class="field-group">
+                                        <lightning-output-field field-name="OwnerId" class="field-item"></lightning-output-field>
+                                    </div>
+                                    <div class="field-group">
+                                        <lightning-output-field field-name="Industry" class="field-item"></lightning-output-field>
+                                    </div>
+                                    <div class="field-group">
+                                        <lightning-output-field field-name="BillingCountry" class="field-item"></lightning-output-field>
+                                    </div>
+                                    <div class="field-group">
+                                        <lightning-output-field field-name="Website" class="field-item"></lightning-output-field>
+                                    </div>
+                                    <div class="field-group">
+                                        <lightning-output-field field-name="AccountNumber" class="field-item"></lightning-output-field>
+                                    </div>
+                                    <div class="field-group full-width">
+                                        <div class="einstein-label">
+                                            <lightning-icon icon-name="utility:einstein" size="x-small" class="einstein-icon"></lightning-icon>
+                                            <span>AI Generated Interactions</span>
+                                        </div>
+                                        <lightning-output-field field-name="Recent_Summary__c" class="field-item"></lightning-output-field>
+                                    </div>
+                                </div>
+                            </lightning-record-view-form>
+                        </div>
+                    </template>
+                </div>
+            </template>
+
+            <template if:true={isStep2}>
+                <div class="step-container">
+                    <div class="step-header">
+                        <h2 class="step-heading">Service Selection & Risk Assessment</h2>
+                        <p class="step-subheading">Choose the service type and complete comprehensive compliance validation</p>
+                    </div>
+                    
+                    <template if:true={isSubStepTypeSelection}>
+                        <div class="content-card">
+                            <div class="card-header">
+                                <lightning-icon icon-name="utility:apps" size="small" class="card-icon"></lightning-icon>
+                                <h3 class="card-title">Service Configuration</h3>
+                            </div>
+                            
+                            <div class="opportunity-type-section">
+                                <div class="opportunity-type-label">
+                                    <label class="slds-form-element__label">
+                                        <span class="required-asterisk">*</span>
+                                        Service Type
+                                    </label>
+                                    <p class="field-help">Choose the primary Service or solution type for this opportunity</p>
+                                </div>
+                                
+                                <div class="opportunity-type-grid">
+                                    <div class="type-option" onclick={handleTypeSelection} data-value="Advisory">
+                                        <div class={advisoryClasses}>
+                                            <lightning-icon icon-name="utility:knowledge_base" size="medium" class="type-icon"></lightning-icon>
+                                            <span class="type-label">Advisory Services</span>
+                                            <p class="type-description">Strategic consulting and expert guidance</p>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="type-option" onclick={handleTypeSelection} data-value="Classification">
+                                        <div class={classificationClasses}>
+                                            <lightning-icon icon-name="utility:anchor" size="medium" class="type-icon"></lightning-icon>
+                                            <span class="type-label">Class & Statutory</span>
+                                            <p class="type-description">Ship classification and regulatory compliance</p>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="type-option" onclick={handleTypeSelection} data-value="Renewables">
+                                        <div class={renewablesClasses}>
+                                            <lightning-icon icon-name="utility:energy" size="medium" class="type-icon"></lightning-icon>
+                                            <span class="type-label">Renewables Certification</span>
+                                            <p class="type-description">Wind, solar, and battery certification services</p>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="type-option" onclick={handleTypeSelection} data-value="Cybersecurity">
+                                        <div class={cybersecurityClasses}>
+                                            <lightning-icon icon-name="utility:lock" size="medium" class="type-icon"></lightning-icon>
+                                            <span class="type-label">Cybersecurity Assurance</span>
+                                            <p class="type-description">Digital security and IT risk assessment</p>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="type-option" onclick={handleTypeSelection} data-value="Digital">
+                                        <div class={digitalClasses}>
+                                            <lightning-icon icon-name="utility:connected_apps" size="medium" class="type-icon"></lightning-icon>
+                                            <span class="type-label">Digital Solutions</span>
+                                            <p class="type-description">Software and digital transformation</p>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="type-option" onclick={handleTypeSelection} data-value="Supply Chain">
+                                        <div class={supplyChainClasses}>
+                                            <lightning-icon icon-name="utility:link" size="medium" class="type-icon"></lightning-icon>
+                                            <span class="type-label">Supply Chain Assurance</span>
+                                            <p class="type-description">Vendor qualification and supply chain risk</p>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="type-option" onclick={handleTypeSelection} data-value="Testing">
+                                        <div class={testingClasses}>
+                                            <lightning-icon icon-name="utility:metrics" size="medium" class="type-icon"></lightning-icon>
+                                            <span class="type-label">Testing & Inspection</span>
+                                            <p class="type-description">Quality assurance and materials testing</p>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="type-option" onclick={handleTypeSelection} data-value="Training">
+                                        <div class={trainingClasses}>
+                                            <lightning-icon icon-name="utility:education" size="medium" class="type-icon"></lightning-icon>
+                                            <span class="type-label">Training & Development</span>
+                                            <p class="type-description">Professional development and certification</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </template>
+
+                    <template if:true={isSubStepRiskAssessment}>
+                        <div class="content-card risk-assessment-card">
+                            <div class="card-header">
+                                <lightning-icon icon-name="utility:shield" size="small" class="card-icon"></lightning-icon>
+                                <h3 class="card-title">Comprehensive Compliance & Risk Validation</h3>
+                                <template if:true={opportunityData.Type}>
+                                    <div class="validation-ready-badge">
+                                        <lightning-icon icon-name="utility:check" size="x-small"></lightning-icon>
+                                        <span>Ready</span>
+                                    </div>
+                                </template>
+                            </div>
+                            
+                            <div class="risk-assessment-container">
+                                <template if:false={isScanning}>
+                                    <template if:false={scanComplete}>
+                                        <div class="validation-prompt">
+                                            <div class="prompt-content">
+                                                <lightning-icon icon-name="utility:shield" size="large" class="prompt-icon"></lightning-icon>
+                                                <h4 class="prompt-title">Ready to Run Compliance Check</h4>
+                                                <p class="prompt-description">
+                                                    We'll verify this opportunity against global sanctions lists, 
+                                                    country risk factors, industry compliance requirements, and environmental regulations 
+                                                    specific to <strong>{opportunityData.Type}</strong> services.
+                                                </p>
+                                                <template if:true={opportunityData.Type}>
+                                                    <div class="last-updated-on">
+                                                        <lightning-icon icon-name="utility:clock" size="xx-small" class="last-updated-icon"></lightning-icon>
+                                                            Last Updated On:
+                                                            <lightning-formatted-date-time value={lastUpdatedOn}
+                                                                year="numeric"
+                                                                month="short"
+                                                                day="2-digit"
+                                                                hour="2-digit"
+                                                                minute="2-digit"
+                                                                second="2-digit"
+                                                        ></lightning-formatted-date-time>
+                                                    </div>
+                                                    <lightning-input 
+                                                        type="toggle"
+                                                        label="Force Update (ignore cache)"
+                                                        checked={forceUpdate}
+                                                        onchange={handleForceUpdateChange}
+                                                        class="force-update-checkbox"
+                                                    ></lightning-input>
+                                                    <lightning-button 
+                                                        label="Run Comprehensive Validation" 
+                                                        variant="brand" 
+                                                        icon-name="utility:shield"
+                                                        onclick={startRiskScan}
+                                                        class="validation-button"
+                                                        disabled={isLoadingAccount}>
+                                                    </lightning-button>
+                                                </template>
+                                                <template if:false={opportunityData.Type}>
+                                                    <p class="requirement-text">
+                                                        <lightning-icon icon-name="utility:info" size="x-small"></lightning-icon>
+                                                        Please select a service type first
+                                                    </p>
+                                                </template>
+                                            </div>
+                                        </div>
+                                    </template>
+                                </template>
+                                
+                                <template if:true={isScanning}>
+                                    <div class="scanning-state">
+                                        <div class="scan-animation">
+                                            <div class="scan-pulse"></div>
+                                            <lightning-icon icon-name="utility:search" size="medium" class="scan-icon"></lightning-icon>
+                                        </div>
+                                        <h4 class="scan-title">{scanStatusText}</h4>
+                                        <div class="scan-progress">
+                                            <div class="scan-bar"></div>
+                                        </div>
+                                        <p class="scan-subtitle">Analyzing against compliance databases and global regulations...</p>
+                                    </div>
+                                </template>
+                            </div>
+                        </div>
+                    </template>
+
+                    <template if:true={isSubStepResults}>
+                        <div class="content-card risk-assessment-card">
+                            <div class="card-header">
+                                <lightning-icon icon-name="utility:shield" size="small" class="card-icon"></lightning-icon>
+                                <h3 class="card-title">Compliance Assessment Results</h3>
+                                <div class="export-section">
+                                    <lightning-button 
+                                        label="Export Report" 
+                                        variant="neutral" 
+                                        icon-name="utility:download"
+                                        onclick={exportRiskReport}
+                                        class="export-button">
+                                    </lightning-button>
+                                </div>
+                            </div>
+                            
+                            <div class="risk-assessment-container">
+                                <div class="scan-results">
+                                    <div class="result-summary">
+                                        <h4 class="results-title">Comprehensive Risk Assessment Results</h4>
+                                        <div class="result-cards">
+                                            <template if:true={riskResults.sanctions}>
+                                                <div class="result-card sanctions-result">
+                                                    <div class="result-header">
+                                                        <lightning-icon icon-name="utility:warning" size="small" class={riskResults.sanctions.status}></lightning-icon>
+                                                        <span class="result-title">{riskResults.sanctions.title}</span>
+                                                        <span class={riskResults.sanctions.status}>{riskResults.sanctions.statusText}</span>
+                                                    </div>
+                                                    <p class="result-description">{riskResults.sanctions.description}</p>
+                                                    <div class="result-details">
+                                                        <template for:each={riskResults.sanctions.details} for:item="detail">
+                                                            <span key={detail} class="detail-item">{detail}</span>
+                                                        </template>
+                                                    </div>
+                                                </div>
+                                            </template>
+                                            
+                                            <template if:true={riskResults.country}>
+                                                <div class="result-card country-result">
+                                                    <div class="result-header">
+                                                        <lightning-icon icon-name="utility:world" size="small" class={riskResults.country.status}></lightning-icon>
+                                                        <span class="result-title">{riskResults.country.title}</span>
+                                                        <span class={riskResults.country.status}>{riskResults.country.statusText}</span>
+                                                    </div>
+                                                    <p class="result-description">{riskResults.country.description}</p>
+                                                    <div class="result-details">
+                                                        <template for:each={riskResults.country.details} for:item="detail">
+                                                            <span key={detail} class="detail-item">{detail}</span>
+                                                        </template>
+                                                    </div>
+                                                </div>
+                                            </template>
+                                            
+                                            <template if:true={riskResults.industry}>
+                                                <div class="result-card industry-result">
+                                                    <div class="result-header">
+                                                        <lightning-icon icon-name="utility:company" size="small" class={riskResults.industry.status}></lightning-icon>
+                                                        <span class="result-title">{riskResults.industry.title}</span>
+                                                        <span class={riskResults.industry.status}>{riskResults.industry.statusText}</span>
+                                                    </div>
+                                                    <p class="result-description">{riskResults.industry.description}</p>
+                                                    <div class="result-details">
+                                                        <template for:each={riskResults.industry.details} for:item="detail">
+                                                            <span key={detail} class="detail-item">{detail}</span>
+                                                        </template>
+                                                    </div>
+                                                </div>
+                                            </template>
+
+                                            <template if:true={riskResults.environmental}>
+                                                <div class="result-card environmental-result">
+                                                    <div class="result-header">
+                                                        <lightning-icon icon-name="utility:world" size="small" class={riskResults.environmental.status}></lightning-icon>
+                                                        <span class="result-title">{riskResults.environmental.title}</span>
+                                                        <span class={riskResults.environmental.status}>{riskResults.environmental.statusText}</span>
+                                                    </div>
+                                                    <p class="result-description">{riskResults.environmental.description}</p>
+                                                    <div class="result-details">
+                                                        <template for:each={riskResults.environmental.details} for:item="detail">
+                                                            <span key={detail} class="detail-item">{detail}</span>
+                                                        </template>
+                                                    </div>
+                                                </div>
+                                            </template>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="compliance-actions">
+                                        <div class="action-item">
+                                            <lightning-icon icon-name="utility:email" size="x-small"></lightning-icon>
+                                            <span>Compliance team will be notified automatically</span>
+                                        </div>
+                                        <div class="action-item">
+                                            <lightning-icon icon-name="utility:file" size="x-small"></lightning-icon>
+                                            <span>Detailed risk assessment report will be attached to opportunity</span>
+                                        </div>
+                                        <div class="action-item">
+                                            <lightning-icon icon-name="utility:database" size="x-small"></lightning-icon>
+                                            <span>Results will be logged in Salesforce</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </template>
+                </div>
+            </template>
+
+            <template if:true={isStep3}>
+                <div class="step-container">
+                    <div class="step-header">
+                        <h2 class="step-heading">Finalize Opportunity</h2>
+                        <p class="step-subheading">Review details and leverage AI assistance to complete setup with specific insights</p>
+                    </div>
+                    
+                    <div class="finalization-layout">
+                        <div class="summary-section">
+                            <div class="content-card">
+                                <div class="card-header">
+                                    <lightning-icon icon-name="utility:opportunity" size="small" class="card-icon"></lightning-icon>
+                                    <h3 class="card-title">Opportunity Summary</h3>
+                                    <div class="draft-badge">
+                                        <lightning-icon icon-name="utility:edit" size="x-small"></lightning-icon>
+                                        <span>Draft</span>
+                                    </div>
+                                </div>
+                                
+                                <div class="summary-content">
+                                    <div class="summary-item">
+                                        <span class="summary-label">Name</span>
+                                        <span class="summary-value">{opportunityData.Name}</span>
+                                    </div>
+                                    <div class="summary-item">
+                                        <span class="summary-label">Service Type</span>
+                                        <span class="summary-value">{opportunityData.Type}</span>
+                                    </div>
+                                    <div class="summary-item">
+                                        <span class="summary-label">Stage</span>
+                                        <span class="summary-value">{opportunityData.StageName}</span>
+                                    </div>
+                                    <div class="summary-item">
+                                        <span class="summary-label">Amount</span>
+                                        <span class="summary-value">
+                                            <template if:true={opportunityData.Amount}>
+                                                <lightning-formatted-number value={opportunityData.Amount} format-style="currency" currency-code="USD"></lightning-formatted-number>
+                                            </template>
+                                            <template if:false={opportunityData.Amount}>
+                                                <span class="placeholder-text">Not set</span>
+                                            </template>
+                                        </span>
+                                    </div>
+                                    <div class="summary-item">
+                                        <span class="summary-label">Close Date</span>
+                                        <span class="summary-value">
+                                            <template if:true={opportunityData.CloseDate}>
+                                                <lightning-formatted-date-time value={opportunityData.CloseDate}></lightning-formatted-date-time>
+                                            </template>
+                                            <template if:false={opportunityData.CloseDate}>
+                                                <span class="placeholder-text">Not set</span>
+                                            </template>
+                                        </span>
+                                    </div>
+                                    <div class="summary-item">
+                                        <span class="summary-label">Compliance Status</span>
+                                        <span class="summary-value">
+                                            <template if:true={riskReportGenerated}>
+                                                <span class="compliance-complete">✓ Validated</span>
+                                            </template>
+                                            <template if:false={riskReportGenerated}>
+                                                <span class="placeholder-text">Pending</span>
+                                            </template>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="ai-section">
+                            <div class="content-card ai-card">
+                                <div class="card-header">
+                                    <lightning-icon icon-name="utility:einstein" size="small" class="card-icon ai-icon"></lightning-icon>
+                                    <h3 class="card-title">AI Assistant</h3>
+                                    <div class="ai-badge">
+                                        <lightning-icon icon-name="utility:new" size="x-small"></lightning-icon>
+                                        <span>Smart</span>
+                                    </div>
+                                </div>
+                                
+                                <p class="ai-description">I can help complete your opportunity using intelligent suggestions based on similar projects, risk assessment results and service expertise.</p>
+                                
+                                <div class="ai-actions">
+                                    <div class="ai-action-item" onclick={handleAIAssist} data-action="autoFill">
+                                        <div class="action-icon">
+                                            <lightning-icon icon-name="utility:magicwand" size="small"></lightning-icon>
+                                        </div>
+                                        <div class="action-content">
+                                            <h4 class="action-title">Smart Complete</h4>
+                                            <p class="action-description">Auto-populate with Service-specific defaults</p>
+                                        </div>
+                                        <div class="action-arrow">
+                                            <lightning-icon icon-name="utility:chevronright" size="small"></lightning-icon>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="ai-action-item" onclick={handleAIAssist} data-action="fillFromSimilar">
+                                        <div class="action-icon">
+                                            <lightning-icon icon-name="utility:chart" size="small"></lightning-icon>
+                                        </div>
+                                        <div class="action-content">
+                                            <h4 class="action-title">Use Similar Deals</h4>
+                                            <p class="action-description">Populate based on comparable opportunities</p>
+                                        </div>
+                                        <div class="action-arrow">
+                                            <lightning-icon icon-name="utility:chevronright" size="small"></lightning-icon>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="ai-action-item" onclick={handleAIAssist} data-action="checkSimilar">
+                                        <div class="action-icon">
+                                            <lightning-icon icon-name="utility:search" size="small"></lightning-icon>
+                                        </div>
+                                        <div class="action-content">
+                                            <h4 class="action-title">Check Similar Projects</h4>
+                                            <p class="action-description">Find comparable engagements and insights</p>
+                                        </div>
+                                        <div class="action-arrow">
+                                            <lightning-icon icon-name="utility:chevronright" size="small"></lightning-icon>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="ai-action-item" onclick={handleAIAssist} data-action="estimateTimeline">
+                                        <div class="action-icon">
+                                            <lightning-icon icon-name="utility:clock" size="small"></lightning-icon>
+                                        </div>
+                                        <div class="action-content">
+                                            <h4 class="action-title">Estimate Timeline</h4>
+                                            <p class="action-description">Predict project duration for services</p>
+                                        </div>
+                                        <div class="action-arrow">
+                                            <lightning-icon icon-name="utility:chevronright" size="small"></lightning-icon>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="ai-action-item" onclick={handleAIAssist} data-action="riskPricing">
+                                        <div class="action-icon">
+                                            <lightning-icon icon-name="utility:moneybag" size="small"></lightning-icon>
+                                        </div>
+                                        <div class="action-content">
+                                            <h4 class="action-title">Risk-Adjusted Pricing</h4>
+                                            <p class="action-description">Suggest pricing based on risk assessment</p>
+                                        </div>
+                                        <div class="action-arrow">
+                                            <lightning-icon icon-name="utility:chevronright" size="small"></lightning-icon>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="ai-action-item" onclick={handleAIAssist} data-action="generateProposal">
+                                        <div class="action-icon">
+                                            <lightning-icon icon-name="utility:page" size="small"></lightning-icon>
+                                        </div>
+                                        <div class="action-content">
+                                            <h4 class="action-title">Generate Proposal</h4>
+                                            <p class="action-description">Create a branded proposal template</p>
+                                        </div>
+                                        <div class="action-arrow">
+                                            <lightning-icon icon-name="utility:chevronright" size="small"></lightning-icon>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <template if:true={aiActionMessage}>
+                                    <div class="ai-feedback">
+                                        <lightning-icon icon-name="utility:success" size="x-small"></lightning-icon>
+                                        <span>{aiActionMessage}</span>
+                                    </div>
+                                </template>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </template>
+        </div>
+
+        <div class="dnv-footer">
+            <div class="footer-content">
+                <div class="footer-left">
+                    <lightning-button 
+                        label="Cancel" 
+                        variant="neutral"
+                        onclick={handleCancel}
+                        class="footer-button">
+                    </lightning-button>
+                    <template if:false={isStep1}>
+                        <lightning-button 
+                            label="Back" 
+                            variant="neutral"
+                            onclick={handleBack} 
+                            class="footer-button">
+                        </lightning-button>
+                    </template>
+                </div>
+                <div class="footer-right">
+                    <template if:false={isStep3}>
+                        <lightning-button 
+                            label="Continue" 
+                            variant="brand" 
+                            class="footer-button primary-button"
+                            onclick={handleNext}>
+                        </lightning-button>
+                    </template>
+                    <template if:true={isStep3}>
+                        <lightning-button 
+                            label="Create Opportunity" 
+                            variant="brand" 
+                            class="footer-button primary-button"
+                            onclick={handleCreateOpportunity} 
+                            disabled={isCreating}>
+                        </lightning-button>
+                    </template>
+                </div>
+            </div>
+        </div>
+        
+        <template if:true={isCreating}>
+            <div class="creation-overlay">
+                <div class="creation-spinner-container">
+                    <lightning-spinner size="large" alternative-text="Creating opportunity..."></lightning-spinner>
+                    <h3 class="simple-title">Creating Your Opportunity</h3>
+                    <p class="simple-message">{creationStepText}</p>
+                </div>
+            </div>
+        </template>
+
+        <template if:true={isCreatingWithLegalCheck}>
+            <div class="creation-overlay">
+                <div class="creation-spinner-container">
+                    <div class="scan-animation">
+                        <div class="scan-pulse"></div>
+                        <lightning-icon icon-name="utility:opportunity" size="medium" class="scan-icon"></lightning-icon>
+                    </div>
+                    <h3 class="scan-title">{creationStepText}</h3>
+                    <div class="scan-progress">
+                        <div class="scan-bar"></div>
+                    </div>
+                    <p class="scan-subtitle">Hold on for good news. Our AI-powered workflow is in motion...</p>
+                </div>
+            </div>
+        </template>
+    </div>
+</template>

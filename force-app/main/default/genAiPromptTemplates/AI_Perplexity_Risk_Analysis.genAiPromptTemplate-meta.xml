@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<GenAiPromptTemplate xmlns="http://soap.sforce.com/2006/04/metadata">
+    <activeVersionIdentifier>Qt8GV/Q4xnRAm8SOP6MDIrOwFQOATLORaOIuqADi7lk=_1</activeVersionIdentifier>
+    <developerName>AI_Perplexity_Risk_Analysis</developerName>
+    <masterLabel>AI Perplexity Risk Analysis</masterLabel>
+    <templateVersions>
+        <content>Act as a Risk &amp; Regulatory Intelligence Analyst. Your task is to perform a comprehensive external risk assessment on the company.
+
+Web Search Results:
+{!$Apex:PerplexityRiskAssessment.Prompt}
+
+
+You must return the output in JSON format as shown below. Do not return anything outside the JSON block.
+
+{
+ &quot;scanId&quot;: &quot;&lt;Unique scan id, e.g. &apos;SCAN-2025-DNV-XXXX&apos;&gt;&quot;,
+ &quot;completedAt&quot;: &quot;&lt;ISO 8601 datetime when scan completes, e.g. 2025-07-25T11:11:22Z&gt;&quot;,
+ &quot;overallRiskLevel&quot;: &quot;&lt;LOW | MODERATE | HIGH | CRITICAL&gt;&quot;,
+ &quot;overallRiskScore&quot;: &lt;number&gt;,
+ &quot;results&quot;: {
+ &quot;sanctions&quot;: {
+  &quot;status&quot;: &quot;&lt;success|warning|info|moderate|error&gt;&quot;,
+  &quot;title&quot;: &quot;Sanctions Screening&quot;,
+  &quot;statusText&quot;: &quot;&lt;Short summary of findings&gt;&quot;,
+  &quot;description&quot;: &quot;&lt;Paragraph summarizing sanctions exposure. Mention any countries, entities, or individuals flagged.&gt;&quot;,
+  &quot;details&quot;: [&quot;&lt;Bullet points about screening results or databases checked&gt;&quot;],
+  &quot;riskScore&quot;: &lt;number&gt;,
+  &quot;databases&quot;: [&quot;&lt;e.g. &apos;OFAC&apos;, &apos;EU_SANCTIONS&apos;, &apos;UN_CONSOLIDATED&apos;&gt;&quot;],
+  &quot;recommendations&quot;: [&quot;&lt;How to reduce exposure or remain compliant&gt;&quot;]
+ },
+ &quot;country&quot;: {
+  &quot;status&quot;: &quot;&lt;success|warning|info|moderate|error&gt;&quot;,
+  &quot;title&quot;: &quot;Country Risk Analysis&quot;,
+  &quot;statusText&quot;: &quot;&lt;Short summary of country risk&gt;&quot;,
+  &quot;description&quot;: &quot;&lt;Political, regulatory, economic or infrastructure risk overview&gt;&quot;,
+  &quot;details&quot;: [&quot;&lt;Bullet points about relevant national-level risks&gt;&quot;],
+  &quot;riskScore&quot;: &lt;number&gt;,
+  &quot;countryCode&quot;: &quot;&lt;ISO 2-letter country code, e.g. &apos;DE&apos;&gt;&quot;,
+  &quot;jurisdiction&quot;: &quot;&lt;Name of primary regulator or authority&gt;&quot;,
+  &quot;industrialZones&quot;: [&quot;&lt;If known, mention relevant economic regions&gt;&quot;],
+  &quot;regulatoryRating&quot;: &quot;&lt;Label like &apos;AAA_GRADE&apos;&gt;&quot;
+ },
+ &quot;industry&quot;: {
+  &quot;status&quot;: &quot;&lt;success|warning|info|moderate|error&gt;&quot;,
+  &quot;title&quot;: &quot;Industry Compliance&quot;,
+  &quot;statusText&quot;: &quot;&lt;Industry compliance risk summary&gt;&quot;,
+  &quot;description&quot;: &quot;&lt;Summary of compliance challenges in this industry&gt;&quot;,
+  &quot;details&quot;: [&quot;&lt;Bullet points about certifications, regulations, market entry barriers&gt;&quot;],
+  &quot;riskScore&quot;: &lt;number&gt;,
+  &quot;applicableRegulations&quot;: [
+  {
+   &quot;code&quot;: &quot;&lt;Short code, e.g. &apos;ISO-9001&apos;&gt;&quot;,
+   &quot;name&quot;: &quot;&lt;Regulation name&gt;&quot;,
+   &quot;mandatory&quot;: &lt;true|false&gt;
+  }
+  ]
+ },
+ &quot;environmental&quot;: {
+  &quot;status&quot;: &quot;&lt;success|warning|info|moderate|error&gt;&quot;,
+  &quot;title&quot;: &quot;Environmental Compliance&quot;,
+  &quot;statusText&quot;: &quot;&lt;Summary of environmental issues&gt;&quot;,
+  &quot;description&quot;: &quot;&lt;Summary of ESG and sustainability-related compliance or violations&gt;&quot;,
+  &quot;details&quot;: [&quot;&lt;New laws, emission standards, or environmental fines&gt;&quot;],
+  &quot;riskScore&quot;: &lt;number&gt;,
+  &quot;carbonFootprint&quot;: {
+  &quot;estimatedAnnualCO2&quot;: &lt;number&gt;,
+  &quot;ciiRating&quot;: &quot;&lt;e.g. &apos;A&apos;, &apos;B&apos;&gt;&quot;,
+  &quot;improvementRequired&quot;: &lt;true|false&gt;
+  },
+  &quot;esgRequirements&quot;: [&quot;&lt;ESG expectations, reporting mandates, etc.&gt;&quot;]
+ }
+ }
+}
+
+</content>
+        <inputs>
+            <apiName>companyName</apiName>
+            <definition>primitive://String</definition>
+            <masterLabel>companyName</masterLabel>
+            <referenceName>Input:companyName</referenceName>
+            <required>true</required>
+        </inputs>
+        <primaryModel>sfdc_ai__DefaultOpenAIGPT4OmniMini</primaryModel>
+        <status>Published</status>
+        <templateDataProviders>
+            <definition>apex://PerplexityRiskAssessment</definition>
+            <parameters>
+                <definition>primitive://String</definition>
+                <isRequired>true</isRequired>
+                <parameterName>companyName</parameterName>
+                <valueExpression>{!$Input:companyName}</valueExpression>
+            </parameters>
+            <referenceName>Apex:PerplexityRiskAssessment</referenceName>
+        </templateDataProviders>
+        <versionIdentifier>Qt8GV/Q4xnRAm8SOP6MDIrOwFQOATLORaOIuqADi7lk=_1</versionIdentifier>
+    </templateVersions>
+    <type>einstein_gpt__flex</type>
+    <visibility>Global</visibility>
+</GenAiPromptTemplate>
