@@ -22,6 +22,8 @@
         <members>Account.AI_Assistant_JSON__c</members>
         <members>Account.AI_Risk_Assessment_JSON__c</members>
         <members>Account.Legal_Check_Required__c</members>
+        <members>Account.Recent_Summary__c</members>
+        <members>Opportunity.Service_Type__c</members>
         <name>CustomField</name>
     </types>
     <types>

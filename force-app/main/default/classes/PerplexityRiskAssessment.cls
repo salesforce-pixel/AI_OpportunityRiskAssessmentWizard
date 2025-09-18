@@ -1,7 +1,7 @@
 public with sharing class PerplexityRiskAssessment {
 
     // 🔐 Store this securely via Custom Metadata in production
-    private static final String API_KEY = 'write_your_API_key_here_OR_use_Custom_Metadata';
+    private static final String API_KEY = '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';
 
     @InvocableMethod(label='Get Risk Assessment from Perplexity' description='Generates a risk assessment report.')
     public static List<Response> performRiskAssessment(List<Request> requests) {
