@@ -216,3 +216,96 @@ This command deploys the metadata into your target org.
   }
 }
 ```
+
+### Account.AI_Risk_Assessment_JSON__c
+```bash
+{
+  "scanId": "SCAN-2025-DNV-001",
+  "completedAt": "2025-08-03T15:13:16Z",
+  "overallRiskLevel": "HIGH",
+  "overallRiskScore": 85,
+  "results": {
+    "sanctions": {
+      "status": "warning",
+      "title": "Sanctions Screening",
+      "statusText": "High risk due to extensive sanctions.",
+      "description": "Virelia Nexus and its affiliates face significant sanctions from the US and UK, particularly in the energy sector. Key entities such as Virelia Nexus and Virelia Nexus Bank are directly sanctioned, which poses compliance challenges for potential business dealings.",
+      "details": [
+        "Virelia Nexus and Virelia Nexus Bank sanctioned under Executive Order 14024.",
+        "Sectoral sanctions affect dealings in energy, shipping, and financial services.",
+        "High involvement of Politically Exposed Persons (PEPs) in Virelia Nexus."
+      ],
+      "riskScore": 80,
+      "databases": [
+        "OFAC",
+        "EU_SANCTIONS",
+        "UN_CONSOLIDATED"
+      ],
+      "recommendations": [
+        "Implement enhanced due diligence for all transactions.",
+        "Regularly update sanctions screening processes.",
+        "Consider legal consultation for compliance strategies."
+      ]
+    },
+    "country": {
+      "status": "warning",
+      "title": "Country Risk Analysis",
+      "statusText": "High geopolitical and economic risk.",
+      "description": "Wakanda is classified as high-risk due to ongoing geopolitical conflicts, severe sanctions, and regulatory unpredictability. The financial and legal systems are under scrutiny, impacting international business operations.",
+      "details": [
+        "Severe political risks due to international isolation over the Ukraine conflict.",
+        "High economic risks from widespread sanctions and GDP contraction.",
+        "Regulatory risks from ad hoc policy changes favoring state interests."
+      ],
+      "riskScore": 90,
+      "countryCode": "RU",
+      "jurisdiction": "Federal Financial Monitoring Service",
+      "industrialZones": [
+        "Siberian Federal District",
+        "Volga Federal District"
+      ],
+      "regulatoryRating": "C_GRADE"
+    },
+    "industry": {
+      "status": "warning",
+      "title": "Industry Compliance",
+      "statusText": "High compliance risks in the energy sector.",
+      "description": "The Wakandan oil and gas sector faces extensive sanctions and compliance challenges. International firms encounter barriers to entry due to strict regulations.",
+      "details": [
+        "Mandatory KYC/AML compliance for all clients and suppliers.",
+        "Prohibition on technology and financial services exports from G7/EU.",
+        "Circumvention risks through opaque shipping networks."
+      ],
+      "riskScore": 85,
+      "applicableRegulations": [
+        {
+          "code": "ISO-14001",
+          "name": "Environmental Management Systems",
+          "mandatory": true
+        }
+      ]
+    },
+    "environmental": {
+      "status": "warning",
+      "title": "Environmental Compliance",
+      "statusText": "Significant environmental compliance challenges.",
+      "description": "Virelia Nexus faces scrutiny over environmental practices, especially regarding methane emissions and governance issues. The company has received low ratings from ESG agencies due to transparency concerns.",
+      "details": [
+        "High carbon emissions from gas flaring and methane leaks.",
+        "Allegations of environmental violations related to pipeline projects.",
+        "Limited regulatory pressure due to sanctions and market isolation."
+      ],
+      "riskScore": 75,
+      "carbonFootprint": {
+        "estimatedAnnualCO2": 5000000,
+        "ciiRating": "C",
+        "improvementRequired": true
+      },
+      "esgRequirements": [
+        "Compliance with international ESG reporting standards.",
+        "Transparency in environmental impact assessments."
+      ]
+    }
+  }
+}
+```
