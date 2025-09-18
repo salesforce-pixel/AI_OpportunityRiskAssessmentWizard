@@ -61,7 +61,7 @@ This command deploys the metadata into your target org.
 ## Example Field Data
 
 ### Account.AI_Assistant_JSON__c
-
+```bash
 {
   "recommendations": {
     "autoFill": {
@@ -215,3 +215,4 @@ This command deploys the metadata into your target org.
     ]
   }
 }
+```
