@@ -55,7 +55,7 @@ This command deploys the metadata into your target org.
   * `AI_Assistant_JSON__c`
   * `AI_Risk_Assessment_JSON__c`
   * `Legal_Check_Required__c` (Set this field value to true on Accounts where you would like this wizard to run)
-* Update these field values manually if needed. Although the results of the risk analysis are normally stored in the above fields as JSON, you can manually populate them for demo readiness.
+* Update these field values manually if needed. Although the results of the risk analysis are normally stored in the above fields as JSON, you can manually populate them for demo readiness. Feel free to change the JSON values as needed, but DO NOT change the JSON keys.
 * Update the **API_Key** from **Perplexity** in the `PerplexityRiskAssessment` Apex class. (Optional for demos: some ready-made results are hardcoded, as described in the custom fields above.)
 
 ## Example Field Data
