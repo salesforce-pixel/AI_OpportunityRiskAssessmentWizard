@@ -1,4 +1,4 @@
-# Smart AI Opportunity Risk Assessment Wizard for B2B Sales
+# Smart AI Opportunity Risk Assessment Wizard
 
 **Author:** Rajeev Shekhar – rshekhar@salesforce.com
 
